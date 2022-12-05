@@ -61,7 +61,7 @@ const addBookHandler = (request, h) => {
     if (isSuccess) {
         const response = h.response({
             status: 'success',
-            message: 'Catatan berhasil ditambahkan',
+            message: 'Buku berhasil ditambahkan',
             data: {
                 bookId: id,
             },
@@ -92,7 +92,15 @@ const getAllBooksHandler = (request, h) => {
             const response = h.response({
                 status: 'success',
                 data: {
-                    books: books.filter((book) => book.reading === true),
+                    books: books.filter((book) => book.reading === true).map(({
+                        id,
+                        name,
+                        publisher
+                    }) => ({
+                        id,
+                        name,
+                        publisher
+                    })),
                 },
             });
             response.code(200);
@@ -101,7 +109,15 @@ const getAllBooksHandler = (request, h) => {
             const response = h.response({
                 status: 'success',
                 data: {
-                    books: books.filter((book) => book.reading === false),
+                    books: books.filter((book) => book.reading === false).map(({
+                        id,
+                        name,
+                        publisher
+                    }) => ({
+                        id,
+                        name,
+                        publisher
+                    })),
                 },
             });
             response.code(200);
@@ -112,7 +128,15 @@ const getAllBooksHandler = (request, h) => {
             const response = h.response({
                 status: 'success',
                 data: {
-                    books: books.filter((book) => book.finished === true),
+                    books: books.filter((book) => book.finished === true).map(({
+                        id,
+                        name,
+                        publisher
+                    }) => ({
+                        id,
+                        name,
+                        publisher
+                    })),
                 },
             });
             response.code(200);
@@ -121,7 +145,15 @@ const getAllBooksHandler = (request, h) => {
             const response = h.response({
                 status: 'success',
                 data: {
-                    books: books.filter((book) => book.finished === false),
+                    books: books.filter((book) => book.finished === false).map(({
+                        id,
+                        name,
+                        publisher
+                    }) => ({
+                        id,
+                        name,
+                        publisher
+                    })),
                 },
             });
             response.code(200);
@@ -131,7 +163,15 @@ const getAllBooksHandler = (request, h) => {
         const response = h.response({
             status: 'success',
             data: {
-                books: books.filter((book) => book.name.toLowerCase().includes(name.toLowerCase())),
+                books: books.filter((book) => book.name.toLowerCase().includes(name.toLowerCase())).map(({
+                    id,
+                    name,
+                    publisher
+                }) => ({
+                    id,
+                    name,
+                    publisher
+                })),
             },
         });
         response.code(200);
@@ -140,7 +180,11 @@ const getAllBooksHandler = (request, h) => {
         const response = h.response({
             status: 'success',
             data: {
-                books
+                books: books.map((book) => ({
+                    id: book.id,
+                    name: book.name,
+                    publisher: book.publisher,
+                })),
             },
         });
         response.code(200);
@@ -154,13 +198,13 @@ const getBooksByIdHandler = (request, h) => {
         id
     } = request.params;
 
-    const note = books.filter((n) => n.id === id)[0];
+    const book = books.filter((n) => n.id === id)[0];
 
-    if (note !== undefined) {
+    if (book !== undefined) {
         return {
             status: 'success',
             data: {
-                note,
+                book,
             },
         };
     }
